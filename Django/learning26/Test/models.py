@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator,MaxValueValidator
 # Create your models here.
 class User(models.Model):
     ROLE_CHOICES = [
@@ -10,7 +10,7 @@ class User(models.Model):
     email=models.EmailField(max_length=254)
     password=models.CharField(max_length=50)
     role=models.CharField(max_length=50,choices=ROLE_CHOICES,default='buyer')
-    mobile=models.IntegerField()
+    mobile=models.CharField(max_length=15)
     address=models.TextField()
 
     class Meta:
@@ -21,7 +21,8 @@ class User(models.Model):
         return self.name
 
 class Vehicle(models.Model):
-    model=models.CharField(max_length=17)
+    vin=models.CharField(max_length=17,unique=True)
+    model=models.CharField(max_length=50)
     company=models.CharField(max_length=50)
     year=models.IntegerField()
     FuelType=models.CharField(max_length=50)
@@ -39,9 +40,9 @@ class Listing(models.Model):
     ('sold', 'Sold'),
     ('available', 'Available'),
 ]
-    seller=models.ForeignKey(User,on_delete=models.CASCADE)
+    seller=models.ForeignKey(User,on_delete=models.CASCADE,)
     vehicle=models.ForeignKey(Vehicle,on_delete=models.CASCADE)
-    price=models.FloatField()
+    price=models.DecimalField(max_digits=10, decimal_places=2)
     status=models.CharField(max_length=50,choices=STATUS_CHOICES,default='available')
 
     class Meta:
@@ -53,7 +54,9 @@ class Listing(models.Model):
 
 class InspectionReport(models.Model):
     listing=models.ForeignKey(Listing,on_delete=models.CASCADE)
-    score=models.IntegerField()
+    score=models.DecimalField(max_digits=4, decimal_places=1,
+    validators=[MinValueValidator(0.0),MaxValueValidator(10.0)])
+
     ai_summary=models.TextField()
     accidents_history=models.IntegerField()
     generated_at=models.DateTimeField(auto_now_add=True)
@@ -67,11 +70,16 @@ class InspectionReport(models.Model):
 
 
 class Offer(models.Model):
+    STATUS_CHOICES = [
+    ('accepted', 'Accepted'),
+    ('rejected', 'Rejected'),
+    ('pending', 'Pending'),
+]
     listing=models.ForeignKey(Listing,on_delete=models.CASCADE)
     buyer=models.ForeignKey(User,on_delete=models.CASCADE)
-    amount=models.FloatField()
-    status=models.CharField(max_length=50)
-    comment=models.TextField()
+    amount=models.DecimalField(max_digits=10, decimal_places=2)
+    status=models.CharField(max_length=50,choices=STATUS_CHOICES,default='pending')
+    comment=models.TextField(null=True)
 
     class Meta:
         db_table='offer'
@@ -81,11 +89,16 @@ class Offer(models.Model):
         return self.listing.vehicle.model
 
 class TestDrive(models.Model):
+    STATUS_CHOICES = [
+    ('completed', 'Completed'),
+    ('pending', 'Pending'),
+    ('cancelled', 'Cancelled'),
+]
     buyer=models.ForeignKey(User,on_delete=models.CASCADE)
     listing=models.ForeignKey(Listing,on_delete=models.CASCADE)
-    schedule_date=models.DateField()
+    schedule_date=models.DateTimeField()
     location=models.CharField(max_length=100)
-    status=models.CharField(max_length=50)
+    status=models.CharField(max_length=50,choices=STATUS_CHOICES,default='pending')
 
     class Meta:
         db_table='testdrive'
@@ -95,10 +108,16 @@ class TestDrive(models.Model):
         return self.listing.vehicle.model
 
 class Transaction(models.Model):
-    buyer=models.ForeignKey(User,on_delete=models.PROTECT,default=None)
+    STATUS_CHOICES = [
+    ('completed', 'Completed'),
+    ('pending', 'Pending'),
+    ('failed', 'Failed'),
+]
+    buyer=models.ForeignKey(User,on_delete=models.PROTECT)
+    listing=models.ForeignKey(Listing,on_delete=models.PROTECT)
     amount=models.DecimalField(max_digits=10,decimal_places=2)
     method=models.CharField(max_length=50)
-    status=models.CharField(max_length=50)
+    status=models.CharField(max_length=50,choices=STATUS_CHOICES,default='pending')
     date=models.DateField(auto_now_add=True)
 
     class Meta:

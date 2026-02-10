@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Employee list</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>post</th>
+                <th>Age</th>
+                <th>Salary</th>
+                <th>join date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in emp %}
+            <tr>
+                <td>{{emp.name}}</td>
+                <td>{{emp.post}}</td>
+                <td>{{emp.age}}</td>
+                <td>{{emp.salary}}</td>
+                <td>{{emp.join_date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+
+</body>
+
+</html>
