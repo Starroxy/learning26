@@ -165,6 +165,8 @@ python manage.py shell
 
 This project is developed for educational purposes.
 
-**Author:**Sumit Thakor
-**Batch:**BE 8th sem
-**Institute:**Kalol Institute of Technology and Research, Kalol
+**Author:** Sumit Thakor
+
+**Batch:** BE 8th sem(2025-26)
+
+**Institute:** Kalol Institute of Technology and Research, Kalol
