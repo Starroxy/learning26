@@ -3,7 +3,7 @@ from .models import employee,course,college,ShopProduct
 from .form import EmployeeForm,CourseForm,collegeform,ProductForm
 # Create your views here.
 def employeelist(request):
-    emp=employee.objects.all().values()
+    emp=employee.objects.all().order_by("id").values()
     emp1=employee.objects.all().values_list()
     print("emp",emp)
     print("emp1",emp1)
@@ -80,4 +80,15 @@ def employeefilter(request,order):
         emp=employee.objects.order_by("-age").values()
     return render(request,"employee/employee.html",{'emp':emp})
 
+
+def updateemployee(request,id):
+    emp=employee.objects.get(id=id)
+    if request.method=="POST":
+        form=EmployeeForm(request.POST,instance=emp)
+        if form.is_valid():
+            form.save()
+            return redirect('employeelist')
+    else:
+        form=EmployeeForm(instance=emp)
+        return render(request,"employee/updateemployee.html",{'form':form})
 
