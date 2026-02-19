@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'Test',
     'employee',
     'service',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     BASE_DIR / "static"
 ]
+CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

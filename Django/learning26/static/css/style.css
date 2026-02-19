@@ -114,6 +114,7 @@ body {
     box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
 }
 
+.content form input[type="submit"]:hover,
 .content a:hover,
 .content table td a:hover {
     transform: scale(1.05) translateY(-2px);
@@ -205,5 +206,5 @@ body {
     border: none;
     color: var(--text-body);
     font-size: 0.9rem;
-    font-weight: 500;
+
 }

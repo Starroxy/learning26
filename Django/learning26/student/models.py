@@ -1,4 +1,5 @@
 from django.db import models
+
 # Create your models here.
 
 class Student(models.Model):
@@ -94,7 +95,7 @@ class category(models.Model):
 class service(models.Model):
     categoryid=models.ForeignKey(category,on_delete=models.CASCADE)#one to many(category)
     serviceName=models.CharField(max_length=50)
-    serviceDescription=models.TextField()
+    serviceDescription=models.TextField(null=True,blank=True)
     servicePrice=models.IntegerField()
     serviceStatus=models.BooleanField(default=True)
     
@@ -103,3 +104,5 @@ class service(models.Model):
         db_table='service'
     def __str__(self):
         return self.serviceName
+
+

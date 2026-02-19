@@ -1,4 +1,4 @@
-<a href="{% url 'createservice' %}">Create Service</a>
+<a href="{% url 'create_service' %}">Create Service</a>
 
 <table border=".5">
     <tr>
@@ -21,8 +21,8 @@
         <td>{{service.rating}}</td>
         <td>{{service.review}}</td>
         <td>
-            <a href="{% url 'updateservice' service.id %}">Edit</a>
-            <a href="{% url 'deleteservice' service.id %}">Delete</a>
+            <a href="{% url 'update_service' service.id %}">Edit</a>
+            <a href="{% url 'delete_service' service.id %}">Delete</a>
         </td>
     </tr>
     {% endfor %}

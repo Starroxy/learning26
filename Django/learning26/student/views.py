@@ -1,7 +1,9 @@
 # Create your views here
-from django.shortcuts import render,redirect
-from .models import Student
-from .form import StudentForm
+from django.shortcuts import render,redirect,get_object_or_404
+from .models import Student,service
+from .form import StudentForm,ServiceForm
+from django.contrib import messages
+
  
 def marks(request):
     return render(request,"student/marks.html")
@@ -46,4 +48,38 @@ def updateprofile(request,id):
     else:
         form=StudentForm(instance=student)
     return render(request,"student/creatprofile.html",{'form':form})
+
+def servicelist(request):
+    service_list=service.objects.all().order_by('id').values()
+    return render(request,"student/servicelist.html",{'services':service_list})
+
+def createservice(request):
+    if request.method=="POST":
+        form=ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('servicelist')
+        else:
+            return render(request,"student/createservice.html",{'form':form})
+    else:
+        form=ServiceForm()
+    return render(request,"student/createservice.html",{'form':form})
+
+def updateservice(request,id):
+    update_service=service.objects.get(id=id)
+    if request.method=="POST":
+        form=ServiceForm(request.POST,instance=update_service)
+        if form.is_valid():
+            form.save()
+            return redirect('servicelist')
+    else:
+        form=ServiceForm(instance=update_service)
+    return render(request,"student/createservice.html",{'form':form})
+
+def deleteservice(request,id):
+   obj = get_object_or_404(service, id=id)
+   obj.delete()
+   messages.success(request,"Service deleted successfully!")
+   return redirect('servicelist')
+
     
